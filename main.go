@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -85,8 +86,7 @@ func parseCoverageLine(line string) (string, *block, bool) {
 	b.endChar, _ = strconv.Atoi(end[1])
 	b.statements, _ = strconv.Atoi(parts[1])
 	b.covered, _ = strconv.Atoi(parts[2])
-	// Remove the underscore (_) from the beginning of the path.
-	return path[0], b, true
+	return filepath.Join(os.Args[1], path[0]), b, true
 }
 
 func parseCoverage(coverage io.Reader) map[string][]*block {
@@ -108,5 +108,8 @@ func parseCoverage(coverage io.Reader) map[string][]*block {
 }
 
 func main() {
+	if len(os.Args) != 2 {
+		log.Fatalln("Must pass in the directory argument")
+	}
 	lcov(parseCoverage(os.Stdin), os.Stdout)
 }
