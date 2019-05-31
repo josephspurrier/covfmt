@@ -86,7 +86,7 @@ func parseCoverageLine(line string) (string, *block, bool) {
 	b.statements, _ = strconv.Atoi(parts[1])
 	b.covered, _ = strconv.Atoi(parts[2])
 	// Remove the underscore (_) from the beginning of the path.
-	return path[0][1:], b, true
+	return path[0], b, true
 }
 
 func parseCoverage(coverage io.Reader) map[string][]*block {
